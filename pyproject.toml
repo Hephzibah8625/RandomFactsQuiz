@@ -1,0 +1,19 @@
+[tool.poetry]
+name = "randomfactsquiz"
+version = "0.1.0"
+description = ""
+authors = ["Hephzibah_301 <shakirov@steadycontrol.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.11"
+streamlit = "^1.33.0"
+requests = "^2.31.0"
+sqlalchemy = "^2.0.29"
+databases = {extras = ["sqlite"], version = "^0.9.0"}
+bcrypt = "^4.1.2"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
