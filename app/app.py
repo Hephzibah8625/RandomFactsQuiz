@@ -45,7 +45,7 @@ def main():
 
 def show_login_form():
 
-    menu = st.selectbox('Menu', ['Sign In', 'Sign Up'])
+    menu = st.sidebar.selectbox('Menu', ['Sign In', 'Sign Up'])
 
     if menu == 'Sign In':
         st.header("Login")
@@ -60,8 +60,8 @@ def show_login_form():
                 if user:
                     # Verify the password
                     if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
-                        st.success(f'Welcome back, {username}!')
                         st.session_state["user_id"] = user.username
+                        st.rerun()
                     else:
                         st.error('Invalid username or password.')
                 else:
@@ -88,13 +88,23 @@ def show_login_form():
                     new_user = User(username=new_username, password=hashed_password.decode('utf-8'))
                     session.add(new_user)
                     session.commit()
-                    st.success('You have successfully signed up!')
                     st.session_state["user_id"] = new_user.username
+                    st.rerun()
             else:
                 st.error("Empty input value.")
 
 
 def show_quiz():
+    st.header(f"Welcome, {st.session_state.user_id}")
+    if st.button("Logout"):
+        st.session_state.pop("user_id")  # Logout the user
+        del st.session_state.quiz_started
+        del st.session_state.questions
+        del st.session_state.correct_answers
+        del st.session_state.completed_questions
+        st.rerun()
+
+
     if "quiz_started" not in st.session_state:
         st.session_state.quiz_started = False
 
@@ -103,14 +113,20 @@ def show_quiz():
         if st.button("Start Quiz"):
             st.session_state.quiz_started = True
             st.session_state.questions = fetch_questions(number_of_questions)
+            st.session_state.correct_answers = 0
+            st.session_state.completed_questions = 0
+            st.rerun()
 
     if st.session_state.quiz_started:
-        answers = play_quiz(st.session_state.questions)
-        if st.button('Submit'):
-            score = answers.count(True)
-            st.success(f"Quiz completed! Your Score: {score}")
-            st.session_state.quiz_started = False  # Reset the quiz state
-            #    st.session_state.pop("user_id")  # Logout the user after completing the quiz
+        play_quiz(st.session_state.questions)
+        if st.session_state.completed_questions == len(st.session_state.questions):
+            st.success(f"Quiz completed! Your Score: {st.session_state.correct_answers}")
+            if st.button("Play Again"):
+                st.session_state.quiz_started = False
+                st.session_state.correct_answers = 0
+                st.session_state.completed_questions = 0
+                st.rerun()
+
 
 def fetch_questions(number: int):
     response = requests.post(f"https://opentdb.com/api.php?amount={number}&type=boolean")
@@ -120,14 +136,33 @@ def fetch_questions(number: int):
         st.error("Failed to fetch questions.")
         return None
 
+
 def play_quiz(questions):
-    answers = []
     for i, question in enumerate(questions):
         st.header(f"Question {i+1}:")
         st.write(question["question"])
-        answer = st.radio("Your Answer:", ["True", "False"], key=i+1)
-        answers.append(answer.lower() == question['correct_answer'].lower())
-    return answers
+        answer = st.radio("Your Answer:", ["True", "False"], None, key=i+1, on_change=on_radio_click(questions))
+
+        if answer is not None:
+            if answer.lower() == question['correct_answer'].lower():
+                st.success("Correct!")
+            else:
+                st.error(f"Incorrect! Correct answer: {question['correct_answer']}")
+
+
+def on_radio_click(questions):
+    st.session_state.correct_answers = 0
+    st.session_state.completed_questions = 0
+
+    for i, question in enumerate(questions):
+        key = i + 1
+        
+        if key in st.session_state and st.session_state[key] is not None:
+            if st.session_state[key].lower() == question['correct_answer'].lower():
+                st.session_state.correct_answers = st.session_state.correct_answers + 1
+            
+            st.session_state.completed_questions = st.session_state.completed_questions + 1
+
 
 if __name__ == "__main__":
     main()
