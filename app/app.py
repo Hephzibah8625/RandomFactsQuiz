@@ -21,10 +21,13 @@ session = Session()
 Base = declarative_base()
 
 # Define a User model
+
+
 class User(Base):
     __tablename__ = 'users'
     username = Column(String, primary_key=True)
     password = Column(String)
+
 
 Base.metadata.create_all(engine)
 
@@ -56,10 +59,12 @@ def show_login_form():
             if len(username) > 0 and len(password) > 0:
                 # Retrieve the user from the database
                 user = session.query(User).filter_by(username=username).first()
-                
+
                 if user:
                     # Verify the password
-                    if bcrypt.checkpw(password.encode('utf-8'), user.password.encode('utf-8')):
+                    if bcrypt.checkpw(
+                            password.encode('utf-8'),
+                            user.password.encode('utf-8')):
                         st.session_state["user_id"] = user.username
                         st.rerun()
                     else:
@@ -75,17 +80,23 @@ def show_login_form():
         if st.button("Register"):
             if len(new_password) > 0 and len(new_username) > 0:
                 # Check if the username already exists
-                existing_user = session.query(User).filter_by(username=new_username).first()
-                
+                existing_user = session.query(User).filter_by(
+                    username=new_username).first()
+
                 if existing_user:
-                    st.error('Username already exists. Please choose a different username.')
+                    st.error(
+                        'Username already exists.' +
+                        ' Please choose a different username.')
                 else:
                     # Hash and salt the password
                     salt = bcrypt.gensalt()
-                    hashed_password = bcrypt.hashpw(new_password.encode('utf-8'), salt)
-            
+                    hashed_password = bcrypt.hashpw(
+                        new_password.encode('utf-8'), salt)
+
                     # Insert the new user into the database
-                    new_user = User(username=new_username, password=hashed_password.decode('utf-8'))
+                    new_user = User(
+                        username=new_username,
+                        password=hashed_password.decode('utf-8'))
                     session.add(new_user)
                     session.commit()
                     st.session_state["user_id"] = new_user.username
@@ -104,12 +115,12 @@ def show_quiz():
         del st.session_state.completed_questions
         st.rerun()
 
-
     if "quiz_started" not in st.session_state:
         st.session_state.quiz_started = False
 
     if not st.session_state.quiz_started:
-        number_of_questions = st.number_input("Number of Questions:", min_value=1, max_value=10, value=5, step=1)
+        number_of_questions = st.number_input(
+            "Number of Questions:", min_value=1, max_value=10, value=5, step=1)
         if st.button("Start Quiz"):
             st.session_state.quiz_started = True
             st.session_state.questions = fetch_questions(number_of_questions)
@@ -119,8 +130,11 @@ def show_quiz():
 
     if st.session_state.quiz_started:
         play_quiz(st.session_state.questions)
-        if st.session_state.completed_questions == len(st.session_state.questions):
-            st.success(f"Quiz completed! Your Score: {st.session_state.correct_answers}")
+        if st.session_state.completed_questions == len(
+                st.session_state.questions):
+            st.success(
+                f"Quiz completed! Your Score: {
+                    st.session_state.correct_answers}")
             if st.button("Play Again"):
                 st.session_state.quiz_started = False
                 st.session_state.correct_answers = 0
@@ -129,7 +143,8 @@ def show_quiz():
 
 
 def fetch_questions(number: int):
-    response = requests.post(f"https://opentdb.com/api.php?amount={number}&type=boolean")
+    response = requests.post(
+        f"https://opentdb.com/api.php?amount={number}&type=boolean")
     if response.status_code == 200:
         return response.json()['results']
     else:
@@ -139,15 +154,19 @@ def fetch_questions(number: int):
 
 def play_quiz(questions):
     for i, question in enumerate(questions):
-        st.header(f"Question {i+1}:")
+        st.header(f"Question {i + 1}:")
         st.write(question["question"])
-        answer = st.radio("Your Answer:", ["True", "False"], None, key=i+1, on_change=on_radio_click(questions))
+        answer = st.radio(
+            "Your Answer:", ["True", "False"],
+            None, key=i + 1, on_change=on_radio_click(questions))
 
         if answer is not None:
             if answer.lower() == question['correct_answer'].lower():
                 st.success("Correct!")
             else:
-                st.error(f"Incorrect! Correct answer: {question['correct_answer']}")
+                st.error(
+                    f"Incorrect! Correct answer: {
+                        question['correct_answer']}")
 
 
 def on_radio_click(questions):
@@ -156,12 +175,13 @@ def on_radio_click(questions):
 
     for i, question in enumerate(questions):
         key = i + 1
-        
+
         if key in st.session_state and st.session_state[key] is not None:
-            if st.session_state[key].lower() == question['correct_answer'].lower():
-                st.session_state.correct_answers = st.session_state.correct_answers + 1
-            
-            st.session_state.completed_questions = st.session_state.completed_questions + 1
+            if st.session_state[key].lower(
+            ) == question['correct_answer'].lower():
+                st.session_state.correct_answers += 1
+
+            st.session_state.completed_questions += 1
 
 
 if __name__ == "__main__":
