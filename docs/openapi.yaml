@@ -5,7 +5,7 @@ info:
   version: "1.0"
 servers:
   - url: https://opentdb.com
-    description: Open Trivia Database server.
+    description: Open Trivia Database API for fetching quiz questions
 paths:
   /api.php:
     get:
@@ -17,16 +17,16 @@ paths:
           schema:
             type: integer
           required: true
-          description: The number of questions to return.
+          description: Number of questions to fetch
         - in: query
           name: type
           schema:
             type: string
             enum: [boolean, multiple]
-          description: The question type, boolean or multiple-choice.
+          description: Type of questions
       responses:
         '200':
-          description: A set of trivia questions with details.
+          description: A JSON array of questions
           content:
             application/json:
               schema:
@@ -39,7 +39,41 @@ paths:
                     items:
                       $ref: '#/components/schemas/Question'
         '400':
-          description: Invalid request parameters.
+          description: Bad request. The specified amount is out of the accepted range.
+  /login:
+    post:
+      summary: Log in an existing user (hypothetical)
+      servers:
+        - url: http://localhost:8501
+          description: Streamlit App Local Server for user management (hypothetical)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '200':
+          description: User successfully logged in
+        '401':
+          description: Unauthorized, such as if the password is incorrect
+  /register:
+    post:
+      summary: Register a new user (hypothetical)
+      servers:
+        - url: http://localhost:8501
+          description: Streamlit App Local Server for user management (hypothetical)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+      responses:
+        '201':
+          description: User successfully registered
+        '400':
+          description: Bad request, such as if the user already exists
 components:
   schemas:
     Question:
@@ -59,3 +93,13 @@ components:
           type: array
           items:
             type: string
+    User:
+      type: object
+      required:
+        - username
+        - password
+      properties:
+        username:
+          type: string
+        password:
+          type: string

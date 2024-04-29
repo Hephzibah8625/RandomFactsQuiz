@@ -556,8 +556,6 @@
   }
   
   
-  00427D
-  
   .sidenav > .active > a {
     position: relative;
     z-index: 2;
@@ -729,6 +727,18 @@
     }
   }
 };
+            defs["User"] = {
+  "required" : [ "password", "username" ],
+  "type" : "object",
+  "properties" : {
+    "username" : {
+      "type" : "string"
+    },
+    "password" : {
+      "type" : "string"
+    }
+  }
+};
   </script>
 
   <div class="container-fluid">
@@ -748,6 +758,12 @@
                   <li class="nav-header" data-group="Default"><a href="#api-Default">API Methods - Default</a></li>
                     <li data-group="Default" data-name="apiPhpGet" class="">
                       <a href="#api-Default-apiPhpGet">apiPhpGet</a>
+                    </li>
+                    <li data-group="Default" data-name="loginPost" class="">
+                      <a href="#api-Default-loginPost">loginPost</a>
+                    </li>
+                    <li data-group="Default" data-name="registerPost" class="">
+                      <a href="#api-Default-registerPost">registerPost</a>
                     </li>
           </ul>
         </nav>
@@ -820,8 +836,8 @@ public class DefaultApiExample {
     public static void main(String[] args) {
         
         DefaultApi apiInstance = new DefaultApi();
-        Integer amount = 56; // Integer | The number of questions to return.
-        String type = type_example; // String | The question type, boolean or multiple-choice.
+        Integer amount = 56; // Integer | Number of questions to fetch
+        String type = type_example; // String | Type of questions
         try {
             inline_response_200 result = apiInstance.apiPhpGet(amount, type);
             System.out.println(result);
@@ -840,8 +856,8 @@ public class DefaultApiExample {
 
     public static void main(String[] args) {
         DefaultApi apiInstance = new DefaultApi();
-        Integer amount = 56; // Integer | The number of questions to return.
-        String type = type_example; // String | The question type, boolean or multiple-choice.
+        Integer amount = 56; // Integer | Number of questions to fetch
+        String type = type_example; // String | Type of questions
         try {
             inline_response_200 result = apiInstance.apiPhpGet(amount, type);
             System.out.println(result);
@@ -857,8 +873,8 @@ public class DefaultApiExample {
   <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
   </div> -->
                             <div class="tab-pane" id="examples-Default-apiPhpGet-0-objc">
-                              <pre class="prettyprint"><code class="language-cpp">Integer *amount = 56; // The number of questions to return.
-String *type = type_example; // The question type, boolean or multiple-choice. (optional)
+                              <pre class="prettyprint"><code class="language-cpp">Integer *amount = 56; // Number of questions to fetch
+String *type = type_example; // Type of questions (optional)
 
 DefaultApi *apiInstance = [[DefaultApi alloc] init];
 
@@ -880,9 +896,9 @@ DefaultApi *apiInstance = [[DefaultApi alloc] init];
                               <pre class="prettyprint"><code class="language-js">var RandomFactsQuizApi = require('random_facts_quiz_api');
 
 var api = new RandomFactsQuizApi.DefaultApi()
-var amount = 56; // {{Integer}} The number of questions to return.
+var amount = 56; // {{Integer}} Number of questions to fetch
 var opts = { 
-  'type': type_example // {{String}} The question type, boolean or multiple-choice.
+  'type': type_example // {{String}} Type of questions
 };
 var callback = function(error, data, response) {
   if (error) {
@@ -913,8 +929,8 @@ namespace Example
         {
 
             var apiInstance = new DefaultApi();
-            var amount = 56;  // Integer | The number of questions to return.
-            var type = type_example;  // String | The question type, boolean or multiple-choice. (optional) 
+            var amount = 56;  // Integer | Number of questions to fetch
+            var type = type_example;  // String | Type of questions (optional) 
 
             try
             {
@@ -937,8 +953,8 @@ namespace Example
 require_once(__DIR__ . '/vendor/autoload.php');
 
 $api_instance = new Swagger\Client\ApiDefaultApi();
-$amount = 56; // Integer | The number of questions to return.
-$type = type_example; // String | The question type, boolean or multiple-choice.
+$amount = 56; // Integer | Number of questions to fetch
+$type = type_example; // String | Type of questions
 
 try {
     $result = $api_instance->apiPhpGet($amount, $type);
@@ -955,8 +971,8 @@ use WWW::SwaggerClient::Configuration;
 use WWW::SwaggerClient::DefaultApi;
 
 my $api_instance = WWW::SwaggerClient::DefaultApi->new();
-my $amount = 56; # Integer | The number of questions to return.
-my $type = type_example; # String | The question type, boolean or multiple-choice.
+my $amount = 56; # Integer | Number of questions to fetch
+my $type = type_example; # String | Type of questions
 
 eval { 
     my $result = $api_instance->apiPhpGet(amount => $amount, type => $type);
@@ -976,8 +992,8 @@ from pprint import pprint
 
 # create an instance of the API class
 api_instance = swagger_client.DefaultApi()
-amount = 56 # Integer | The number of questions to return.
-type = type_example # String | The question type, boolean or multiple-choice. (optional)
+amount = 56 # Integer | Number of questions to fetch
+type = type_example # String | Type of questions (optional)
 
 try: 
     # Fetch quiz questions
@@ -1012,7 +1028,7 @@ except ApiException as e:
                                                 </span>
                                 
                                                     <div class="inner description">
-                                                        The number of questions to return.
+                                                        Number of questions to fetch
                                                     </div>
                                             </div>
                                                 <div class="inner required">
@@ -1034,7 +1050,7 @@ except ApiException as e:
                                                 </span>
                                 
                                                     <div class="inner description">
-                                                        The question type, boolean or multiple-choice.
+                                                        Type of questions
                                                     </div>
                                             </div>
                                         </div>
@@ -1044,7 +1060,7 @@ except ApiException as e:
                             </table>
 
                           <h2>Responses</h2>
-                            <h3> Status: 200 - A set of trivia questions with details. </h3>
+                            <h3> Status: 200 - A JSON array of questions </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                                 <li class="active">
@@ -1059,7 +1075,7 @@ except ApiException as e:
                                     <script>
                                       $(document).ready(function() {
                                         var schemaWrapper = {
-  "description" : "A set of trivia questions with details.",
+  "description" : "A JSON array of questions",
   "content" : {
     "application/json" : {
       "schema" : {
@@ -1092,7 +1108,545 @@ except ApiException as e:
                                 </div>
                             </div>
 
-                            <h3> Status: 400 - Invalid request parameters. </h3>
+                            <h3> Status: 400 - Bad request. The specified amount is out of the accepted range. </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-loginPost">
+                      <article id="api-Default-loginPost-0" data-group="User" data-name="loginPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>loginPost</h1>
+                          <p>Log in an existing user (hypothetical)</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/login</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-loginPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-loginPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-loginPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-loginPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-loginPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-loginPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-loginPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-loginPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-loginPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-loginPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-loginPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-loginPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Content-Type: application/json"\
+"https://opentdb.com/login"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-loginPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        
+        DefaultApi apiInstance = new DefaultApi();
+        User body = ; // User | 
+        try {
+            apiInstance.loginPost(body);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#loginPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-loginPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        User body = ; // User | 
+        try {
+            apiInstance.loginPost(body);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#loginPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-loginPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-loginPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">User *body = ; // 
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Log in an existing user (hypothetical)
+[apiInstance loginPostWith:body
+              completionHandler: ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-loginPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var RandomFactsQuizApi = require('random_facts_quiz_api');
+
+var api = new RandomFactsQuizApi.DefaultApi()
+var body = ; // {{User}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.loginPost(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-loginPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-loginPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class loginPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DefaultApi();
+            var body = new User(); // User | 
+
+            try
+            {
+                // Log in an existing user (hypothetical)
+                apiInstance.loginPost(body);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.loginPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-loginPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$body = ; // User | 
+
+try {
+    $api_instance->loginPost($body);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->loginPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-loginPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $body = WWW::SwaggerClient::Object::User->new(); # User | 
+
+eval { 
+    $api_instance->loginPost(body => $body);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->loginPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-loginPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body =  # User | 
+
+try: 
+    # Log in an existing user (hypothetical)
+    api_instance.login_post(body)
+except ApiException as e:
+    print("Exception when calling DefaultApi->loginPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/User"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_loginPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_loginPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 200 - User successfully logged in </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 401 - Unauthorized, such as if the password is incorrect </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                        </article>
+                      </div>
+                      <hr>
+                    <div id="api-Default-registerPost">
+                      <article id="api-Default-registerPost-0" data-group="User" data-name="registerPost" data-version="0">
+                        <div class="pull-left">
+                          <h1>registerPost</h1>
+                          <p>Register a new user (hypothetical)</p>
+                        </div>
+                        <div class="pull-right"></div>
+                        <div class="clearfix"></div>
+                        <p></p>
+                        <p class="marked"></p>
+                        <p></p>
+                        <br />
+                        <pre class="prettyprint language-html prettyprinted" data-type="post"><code><span class="pln">/register</span></code></pre>
+                        <p>
+                          <h3>Usage and SDK Samples</h3>
+                        </p>
+                        <ul class="nav nav-tabs nav-tabs-examples">
+                          <li class="active"><a href="#examples-Default-registerPost-0-curl">Curl</a></li>
+                          <li class=""><a href="#examples-Default-registerPost-0-java">Java</a></li>
+                          <li class=""><a href="#examples-Default-registerPost-0-android">Android</a></li>
+                          <!--<li class=""><a href="#examples-Default-registerPost-0-groovy">Groovy</a></li>-->
+                          <li class=""><a href="#examples-Default-registerPost-0-objc">Obj-C</a></li>
+                          <li class=""><a href="#examples-Default-registerPost-0-javascript">JavaScript</a></li>
+                          <!--<li class=""><a href="#examples-Default-registerPost-0-angular">Angular</a></li>-->
+                          <li class=""><a href="#examples-Default-registerPost-0-csharp">C#</a></li>
+                          <li class=""><a href="#examples-Default-registerPost-0-php">PHP</a></li>
+                          <li class=""><a href="#examples-Default-registerPost-0-perl">Perl</a></li>
+                          <li class=""><a href="#examples-Default-registerPost-0-python">Python</a></li>
+                        </ul>
+
+                        <div class="tab-content">
+                          <div class="tab-pane active" id="examples-Default-registerPost-0-curl">
+                           <pre class="prettyprint"><code class="language-bsh">curl -X POST\
+-H "Content-Type: application/json"\
+"https://opentdb.com/register"</code></pre>
+                          </div>
+                          <div class="tab-pane" id="examples-Default-registerPost-0-java">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.*;
+import io.swagger.client.auth.*;
+import io.swagger.client.model.*;
+import io.swagger.client.api.DefaultApi;
+
+import java.io.File;
+import java.util.*;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        
+        DefaultApi apiInstance = new DefaultApi();
+        User body = ; // User | 
+        try {
+            apiInstance.registerPost(body);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#registerPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+
+                          <div class="tab-pane" id="examples-Default-registerPost-0-android">
+                            <pre class="prettyprint"><code class="language-java">import io.swagger.client.api.DefaultApi;
+
+public class DefaultApiExample {
+
+    public static void main(String[] args) {
+        DefaultApi apiInstance = new DefaultApi();
+        User body = ; // User | 
+        try {
+            apiInstance.registerPost(body);
+        } catch (ApiException e) {
+            System.err.println("Exception when calling DefaultApi#registerPost");
+            e.printStackTrace();
+        }
+    }
+}</code></pre>
+                          </div>
+  <!--
+  <div class="tab-pane" id="examples-Default-registerPost-0-groovy">
+  <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+  </div> -->
+                            <div class="tab-pane" id="examples-Default-registerPost-0-objc">
+                              <pre class="prettyprint"><code class="language-cpp">User *body = ; // 
+
+DefaultApi *apiInstance = [[DefaultApi alloc] init];
+
+// Register a new user (hypothetical)
+[apiInstance registerPostWith:body
+              completionHandler: ^(NSError* error) {
+                            if (error) {
+                                NSLog(@"Error: %@", error);
+                            }
+                        }];
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-registerPost-0-javascript">
+                              <pre class="prettyprint"><code class="language-js">var RandomFactsQuizApi = require('random_facts_quiz_api');
+
+var api = new RandomFactsQuizApi.DefaultApi()
+var body = ; // {{User}} 
+
+var callback = function(error, data, response) {
+  if (error) {
+    console.error(error);
+  } else {
+    console.log('API called successfully.');
+  }
+};
+api.registerPost(body, callback);
+</code></pre>
+                            </div>
+
+                            <!--<div class="tab-pane" id="examples-Default-registerPost-0-angular">
+              <pre class="prettyprint language-json prettyprinted" data-type="json"><code>Coming Soon!</code></pre>
+            </div>-->
+                            <div class="tab-pane" id="examples-Default-registerPost-0-csharp">
+                              <pre class="prettyprint"><code class="language-cs">using System;
+using System.Diagnostics;
+using IO.Swagger.Api;
+using IO.Swagger.Client;
+using IO.Swagger.Model;
+
+namespace Example
+{
+    public class registerPostExample
+    {
+        public void main()
+        {
+
+            var apiInstance = new DefaultApi();
+            var body = new User(); // User | 
+
+            try
+            {
+                // Register a new user (hypothetical)
+                apiInstance.registerPost(body);
+            }
+            catch (Exception e)
+            {
+                Debug.Print("Exception when calling DefaultApi.registerPost: " + e.Message );
+            }
+        }
+    }
+}
+</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-registerPost-0-php">
+                              <pre class="prettyprint"><code class="language-php"><&#63;php
+require_once(__DIR__ . '/vendor/autoload.php');
+
+$api_instance = new Swagger\Client\ApiDefaultApi();
+$body = ; // User | 
+
+try {
+    $api_instance->registerPost($body);
+} catch (Exception $e) {
+    echo 'Exception when calling DefaultApi->registerPost: ', $e->getMessage(), PHP_EOL;
+}
+?></code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-registerPost-0-perl">
+                              <pre class="prettyprint"><code class="language-perl">use Data::Dumper;
+use WWW::SwaggerClient::Configuration;
+use WWW::SwaggerClient::DefaultApi;
+
+my $api_instance = WWW::SwaggerClient::DefaultApi->new();
+my $body = WWW::SwaggerClient::Object::User->new(); # User | 
+
+eval { 
+    $api_instance->registerPost(body => $body);
+};
+if ($@) {
+    warn "Exception when calling DefaultApi->registerPost: $@\n";
+}</code></pre>
+                            </div>
+
+                            <div class="tab-pane" id="examples-Default-registerPost-0-python">
+                              <pre class="prettyprint"><code class="language-python">from __future__ import print_statement
+import time
+import swagger_client
+from swagger_client.rest import ApiException
+from pprint import pprint
+
+# create an instance of the API class
+api_instance = swagger_client.DefaultApi()
+body =  # User | 
+
+try: 
+    # Register a new user (hypothetical)
+    api_instance.register_post(body)
+except ApiException as e:
+    print("Exception when calling DefaultApi->registerPost: %s\n" % e)</code></pre>
+                            </div>
+                          </div>
+
+                          <h2>Parameters</h2>
+
+
+
+                            <div class="methodsubtabletitle">Body parameters</div>
+                            <table id="methodsubtable">
+                              <tr>
+                                <th width="150px">Name</th>
+                                <th>Description</th>
+                              </tr>
+                                <tr><td style="width:150px;">body <span style="color:red;">*</span></td>
+                                <td>
+                                
+                                
+                                <script>
+                                $(document).ready(function() {
+                                  var schemaWrapper = {
+  "content" : {
+    "application/json" : {
+      "schema" : {
+        "$ref" : "#/components/schemas/User"
+      }
+    }
+  },
+  "required" : true
+};
+                                  var schema = schemaWrapper.content["application/json"].schema;
+                                  if (schema.$ref != null) {
+                                    schema = defsParser.$refs.get(schema.$ref);
+                                  } else {
+                                    schemaWrapper.components = {};
+                                    schemaWrapper.components.schemas = Object.assign({}, defs);
+                                    $RefParser.dereference(schemaWrapper).catch(function(err) {
+                                      console.log(err);
+                                    });
+                                  }
+                                
+                                  var view = new JSONSchemaView(schema,2,{isBodyParam: true});
+                                  var result = $('#d2e199_registerPost_body');
+                                  result.empty();
+                                  result.append(view.render());
+                                });
+                                </script>
+                                <div id="d2e199_registerPost_body"></div>
+                                </td>
+                                </tr>
+                            </table>
+
+
+
+                          <h2>Responses</h2>
+                            <h3> Status: 201 - User successfully registered </h3>
+
+                            <ul class="nav nav-tabs nav-tabs-examples" >
+                            </ul>
+
+                            <div class="tab-content" style='margin-bottom: 10px;'>
+                            </div>
+
+                            <h3> Status: 400 - Bad request, such as if the user already exists </h3>
 
                             <ul class="nav nav-tabs nav-tabs-examples" >
                             </ul>
