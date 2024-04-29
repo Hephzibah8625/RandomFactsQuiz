@@ -6,7 +6,7 @@ authors = ["Hephzibah_301 <shakirov@steadycontrol.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.11"
+python = "^3.12"
 streamlit = "^1.33.0"
 requests = "^2.31.0"
 sqlalchemy = "^2.0.29"

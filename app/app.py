@@ -109,10 +109,14 @@ def show_quiz():
     st.header(f"Welcome, {st.session_state.user_id}")
     if st.button("Logout"):
         st.session_state.pop("user_id")  # Logout the user
-        del st.session_state.quiz_started
-        del st.session_state.questions
-        del st.session_state.correct_answers
-        del st.session_state.completed_questions
+        if "quiz_started" in st.session_state:
+            del st.session_state.quiz_started
+        if "questions" in st.session_state:
+            del st.session_state.questions
+        if "correct_answers" in st.session_state:
+            del st.session_state.correct_answers
+        if "completed_questions" in st.session_state:
+            del st.session_state.completed_questions
         st.rerun()
 
     if "quiz_started" not in st.session_state:
