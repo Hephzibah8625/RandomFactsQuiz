@@ -1,0 +1,38 @@
+name: Python Poetry CI
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'  # Set this to your desired Python version
+
+    - name: Install Poetry
+      run: |
+        pip install poetry
+
+    - name: Cache Poetry virtual environment
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
+
+    - name: Install dependencies
+      run: |
+        poetry install
+
+    - name: Run tests
+      run: |
+        poetry run pytest
