@@ -1,0 +1,61 @@
+openapi: 3.0.0
+info:
+  title: Random Facts Quiz API
+  description: This API interfaces with the Open Trivia Database to retrieve trivia questions for quiz applications. Users can request questions by quantity and type, receiving them in a standardized JSON format.
+  version: "1.0"
+servers:
+  - url: https://opentdb.com
+    description: Open Trivia Database server.
+paths:
+  /api.php:
+    get:
+      summary: Fetch quiz questions
+      description: Obtains trivia questions based on specified amount and type, such as boolean or multiple-choice.
+      parameters:
+        - in: query
+          name: amount
+          schema:
+            type: integer
+          required: true
+          description: The number of questions to return.
+        - in: query
+          name: type
+          schema:
+            type: string
+            enum: [boolean, multiple]
+          description: The question type, boolean or multiple-choice.
+      responses:
+        '200':
+          description: A set of trivia questions with details.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  response_code:
+                    type: integer
+                  results:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Question'
+        '400':
+          description: Invalid request parameters.
+components:
+  schemas:
+    Question:
+      type: object
+      properties:
+        category:
+          type: string
+        type:
+          type: string
+        difficulty:
+          type: string
+        question:
+          type: string
+        correct_answer:
+          type: string
+        incorrect_answers:
+          type: array
+          items:
+            type: string
