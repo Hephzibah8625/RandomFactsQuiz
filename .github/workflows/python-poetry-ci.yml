@@ -34,7 +34,15 @@ jobs:
     - name: Install dependencies
       run: |
         poetry install
-
-    - name: Run tests
+  
+    - name: Run pytest
       run: |
         poetry run pytest --cov-report term --cov=./app --cov-fail-under=60 tests/unit
+
+    - name: Run flake
+      run: |
+        poetry run flake8 app/app.py
+
+    - name: Rum locust
+      run: |
+        poetry run locust -f locust/locustfile.py
