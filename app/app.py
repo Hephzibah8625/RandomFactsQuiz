@@ -162,7 +162,9 @@ def play_quiz(questions):
         st.write(question["question"])
         answer = st.radio(
             "Your Answer:", ["True", "False"],
-            None, key=i + 1, on_change=on_radio_click(questions))
+            None, key=i + 1, on_change=on_radio_click(questions),
+            disabled=i + 1 in st.session_state and
+            st.session_state[i + 1] is not None)
 
         if answer is not None:
             if answer.lower() == question['correct_answer'].lower():
