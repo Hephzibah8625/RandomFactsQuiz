@@ -148,7 +148,8 @@ def show_quiz():
 
 def fetch_questions(number: int):
     response = requests.post(
-        f"https://opentdb.com/api.php?amount={number}&type=boolean")
+        f"https://opentdb.com/api.php?amount={number}&type=boolean",
+        timeout=10)
     if response.status_code == 200:
         return response.json()['results']
     else:

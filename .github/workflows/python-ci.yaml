@@ -1,0 +1,62 @@
+name: Python Poetry CI
+
+on:
+  push:
+    branches:
+      - '**'
+  pull_request:
+    branches: 
+      - '**'
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v2
+    - name: Set up Python
+      uses: actions/setup-python@v2
+      with:
+        python-version: '3.12'
+
+    - name: Install Poetry
+      run: |
+        pip install poetry
+    - name: Cache Poetry virtual environment
+      uses: actions/cache@v2
+      with:
+        path: ~/.cache/pypoetry/virtualenvs
+        key: ${{ runner.os }}-poetry-${{ hashFiles('**/poetry.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-poetry-
+    - name: Install dependencies
+      run: |
+        poetry install
+  
+    - name: Run pytest
+      run: |
+        poetry run pytest --cov-report term --cov=./app --cov-fail-under=60 tests/unit
+    - name: Run flake
+      run: |
+        poetry run flake8 app/app.py
+    
+    - name: Security check with Bandit
+      run: |
+        poetry run bandit -r app/app.py
+    
+    - name: Run locust 
+      run: |
+        poetry run locust -f locust/locustfile.py --headless --users 2 --spawn-rate 2 --run-time 1m || exit 0
+
+    - name: Install Snyk
+      run: |
+        npm install -g snyk
+
+    - name: Snyk Vulnerability Scan
+      run: |
+        snyk auth 'b7fb72b7-4340-4ac8-b141-7c11b49b0a6a'
+        snyk test --all-projects || exit 0
+      env:
+        SNYK_TOKEN: 'b7fb72b7-4340-4ac8-b141-7c11b49b0a6a'
+
+    

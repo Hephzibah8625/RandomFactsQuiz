@@ -6,13 +6,13 @@ from app.app import show_login_form, User, session, show_quiz, fetch_questions, 
 def test_fetch_questions(mock_post):
     result = fetch_questions(5)
     assert result == 'test_questions'
-    mock_post.assert_called_once_with('https://opentdb.com/api.php?amount=5&type=boolean')
+    mock_post.assert_called_once_with('https://opentdb.com/api.php?amount=5&type=boolean', timeout=10)
 
 @patch('requests.post', return_value=MagicMock(status_code=404))
 def test_fail_fetch_questions(mock_post):
     result = fetch_questions(5)
     assert result is None
-    mock_post.assert_called_once_with('https://opentdb.com/api.php?amount=5&type=boolean')
+    mock_post.assert_called_once_with('https://opentdb.com/api.php?amount=5&type=boolean', timeout=10)
 
 @patch('app.app.st')
 def test_show_quiz(mock_st):
